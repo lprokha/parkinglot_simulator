@@ -109,7 +109,15 @@ public class Main {
             System.out.println("5. Гистограмма машины < 30 минут");
             System.out.println("0. Выход");
 
-            int choice = scanner.nextInt();
+            int choice;
+
+            try {
+                choice = scanner.nextInt();
+            } catch (InputMismatchException e) {
+                System.out.println("Ошибка ввода. Пожалуйста, введите число из меню.");
+                scanner.nextLine();
+                continue;
+            }
             switch (choice) {
                 case 0 -> {
                     return;
