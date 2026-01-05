@@ -39,142 +39,167 @@ public class Main {
             }
         }
         showMenu(cars);
-//        System.out.println("=== Тест аналитических методов ===");
-//
-//        // 1. Общая сумма заработка за день 5
-//        double incomeDay5 = totalIncomeForDay(cars, 5);
-//        System.out.printf("Общая сумма заработка за 5-й день: %.2f USD%n", incomeDay5);
-//
-//        // 2. Минимальная, средняя и максимальная сумма заработка за месяц
-//        double[] minAvgMax = getMinAvgMaxEarnings(cars);
-//        System.out.printf("Мин/сред/макс за месяц: %.2f / %.2f / %.2f USD%n", minAvgMax[0], minAvgMax[1], minAvgMax[2]);
-//
-//         //3.
-//        System.out.println("\n=== 10 машин, стоявших на парковке дольше всего ===");
-//        List<Car> topTen = getTopTenLongestParkedCars(cars);
-//        for (Car car : topTen) {
-//            int totalSteps = 0;
-//            for (ParkingSession s : car.getHistory()) {
-//                int exit = s.exitStep;
-//                if (exit == -1) exit = DAYS * STEPS_IN_DAY;
-//                totalSteps += exit - s.entryStep;
-//            }
-//            int totalMinutes = totalSteps * MINUTES_PER_STEP;
-//            System.out.printf("Машина %s: %d шагов, %d минут\n", car.getId(), totalSteps, totalMinutes);
-//        }
-//        //4.
-//        System.out.println("=== Тест countCarsParkedLessThan30Min ===");
-//        int dayToCheck = 5; // например, 5-й день
-//        int shortParkedCount = countCarsParkedLessThan30Min(cars, dayToCheck);
-//        System.out.printf("Количество машин, простоявших меньше 30 минут в день %d: %d\n",
-//                dayToCheck, shortParkedCount);
-//        //5.
-//        System.out.println("=== Тест averageOccupancyPercent ===");
-//        double avgOccupancy = averageOccupancyPercent(cars, dayToCheck);
-//        System.out.printf("Средний процент загруженности парковки в день %d: %.2f%%\n", dayToCheck, avgOccupancy);
-//        //6.
-//        System.out.println("\n=== Тест: машины, побывавшие на парковке за день/час ===");
-//
-//// машины за целый 5-й день
-//        List<Car> carsDay5 = carsPresentAtHourOrDay(cars, 5, -1);
-//        System.out.println("Машины на парковке в день 5:");
-//        for (Car c : carsDay5) {
-//            System.out.println(c.getId());
-//        }
-//
-//// машины на парковке в 10-й час 5-го дня (10:00 - 10:59)
-//        List<Car> carsHour10 = carsPresentAtHourOrDay(cars, 5, 10);
-//        System.out.println("\nМашины на парковке в день 5, час 10:");
-//        for (Car c : carsHour10) {
-//            System.out.println(c.getId());
-//        }
-//        //7.
-//        System.out.println("\n=== Дни, когда машина C5 была на парковке ===");
-//        List<Integer> daysC5 = getDaysCarWasParked(cars, "C5");
-//        for (int d : daysC5) {
-//            System.out.print(d + " ");
-//        }
-//        System.out.println();
+
+    }
+
+    public static int readIntSafe(
+            Scanner scanner,
+            String prompt,
+            int min,
+            int max
+    ) {
+        while (true) {
+            System.out.print(prompt);
+            try {
+                int value = scanner.nextInt();
+                if (value < min || value > max) {
+                    System.out.println("Введите число от " + min + " до " + max + ".");
+                    continue;
+                }
+                return value;
+            } catch (InputMismatchException e) {
+                System.out.println("Ошибка . Введите число");
+                scanner.nextLine();
+            }
+        }
     }
 
     public static void showMenu(List<Car> cars) {
         Scanner scanner = new Scanner(System.in);
         Canvas canvas = new Canvas(80, 20);
+        boolean running = true;
 
-        while (true) {
+        while (running) {
+            System.out.println("\n===== МЕНЮ =====");
             System.out.println("1. Показать счета за месяц");
             System.out.println("2. Список всех машин");
-            System.out.println("3. Гистограмма средняя загруженность парковки");
-            System.out.println("4. Гистограмма ежедневный заработок");
-            System.out.println("5. Гистограмма машины < 30 минут");
+            System.out.println("3. 10 машин, стоявших дольше всего");
+            System.out.println("4. Доход за конкретный день");
+            System.out.println("5. Минимальная/средняя/максимальная сумма за месяц");
+            System.out.println("6. Машины, припаркованные < 30 минут за день");
+            System.out.println("7. Средний процент загруженности парковки за день");
+            System.out.println("8. Список машин за определённый день/час");
+            System.out.println("9. Дни, когда машина была на парковке");
+            System.out.println("10. Гистограмма среднее количество занятых мест");
+            System.out.println("11. Гистограмма ежедневный заработок");
+            System.out.println("12. Гистограмма машины < 30 минут");
             System.out.println("0. Выход");
 
             int choice;
 
             try {
+                System.out.print("введите действие: ");
                 choice = scanner.nextInt();
             } catch (InputMismatchException e) {
                 System.out.println("Ошибка ввода. Пожалуйста, введите число из меню.");
                 scanner.nextLine();
                 continue;
             }
+
             switch (choice) {
-                case 0 -> {
-                    return;
-                }
+                case 0 -> running = false;
 
                 case 1 -> calculateBills(cars);
 
-                case 2 -> {
-                    for (Car car : cars) {
-                        System.out.println(car.getId());
-                    }
-                }
+                case 2 -> cars.forEach(car -> System.out.println(car.getId()));
 
                 case 3 -> {
-                    double[] occupancy = new double[DAYS];
-                    for (int d = 1; d <= DAYS; d++) {
-                        double percent = averageOccupancyPercent(cars, d);
-                        occupancy[d - 1] = percent * PARKING_SPOTS / 100.0;
+                    List<Car> topTen = getTopTenLongestParkedCars(cars);
+                    System.out.println("=== 10 машин, стоявших дольше всего ===");
+                    for (Car car : topTen) {
+                        int totalSteps = 0;
+                        for (ParkingSession s : car.getHistory()) {
+                            int exit = s.exitStep;
+                            if (exit == -1) exit = DAYS * STEPS_IN_DAY;
+                            totalSteps += exit - s.entryStep;
+                        }
+                        int totalMinutes = totalSteps * MINUTES_PER_STEP;
+                        System.out.printf("Машина %s: %d минут\n", car.getId(), totalMinutes);
                     }
-
-                    HistogramDrawer.drawHistogram(
-                            canvas,
-                            occupancy,
-                            "Среднее количество занятых мест по дням",
-                            "*"
-                    );
                 }
 
                 case 4 -> {
+                    int day = readIntSafe(scanner, "Введите день (1–30): ", 1, DAYS);
+                    double income = totalIncomeForDay(cars, day);
+                    System.out.printf("Доход за день %d: %.2f USD\n", day, income);
+                }
+
+                case 5 -> {
+                    double[] stats = getMinAvgMaxEarnings(cars);
+                    System.out.printf("Мин/сред/макс доход за месяц: %.2f / %.2f / %.2f USD\n",
+                            stats[0], stats[1], stats[2]);
+                }
+
+                case 6 -> {
+                    int day = readIntSafe(scanner, "Введите день (1–30): ", 1, DAYS);
+                    int count = countCarsParkedLessThan30Min(cars, day);
+                    System.out.println("Машин < 30 минут в день " + day + ": " + count);
+                }
+
+                case 7 -> {
+                    int day = readIntSafe(scanner, "Введите день (1–30): ", 1, DAYS);
+                    double percent = averageOccupancyPercent(cars, day);
+                    System.out.printf("Средний процент загруженности за день %d: %.2f%%\n", day, percent);
+                }
+
+                case 8 -> {
+                    int day = readIntSafe(scanner, "Введите день (1–30): ", 1, DAYS);
+                    System.out.print("Введите час (0–23, -1 для всего дня): ");
+                    int hour;
+                    try {
+                        hour = scanner.nextInt();
+                        if (hour < -1 || hour > 23) {
+                            System.out.println("Неверный час. Используется -1 (весь день)");
+                            hour = -1;
+                        }
+                    } catch (InputMismatchException e) {
+                        System.out.println("Ошибка ввода. Используется -1 (весь день)");
+                        scanner.nextLine();
+                        hour = -1;
+                    }
+
+                    List<Car> carsAtTime = carsPresentAtHourOrDay(cars, day, hour);
+                    System.out.println("Машины на парковке :");
+                    for (Car c : carsAtTime) System.out.println(c.getId());
+                }
+
+                case 9 -> {
+                    System.out.print("Введите номер машины (например C5) : ");
+                    scanner.nextLine();
+                    String carId = scanner.nextLine().trim().toUpperCase();
+                    List<Integer> daysCarWasParked = getDaysCarWasParked(cars, carId);
+                    if (daysCarWasParked.isEmpty()) {
+                        System.out.println("Машина не была на парковке");
+                    } else {
+                        System.out.println("Дни, когда машина была на парковке : " + daysCarWasParked);
+                    }
+                }
+
+                case 10 -> {
+                    double[] occupancy = new double[DAYS];
+                    for (int d = 1; d <= DAYS; d++) {
+                        occupancy[d - 1] = averageOccupancyPercent(cars, d) * PARKING_SPOTS / 100.0;
+                    }
+                    HistogramDrawer.drawHistogram(canvas, occupancy, "Среднее количество занятых мест", "*");
+                }
+
+                case 11 -> {
                     double[] income = new double[DAYS];
                     for (int d = 1; d <= DAYS; d++) {
                         income[d - 1] = totalIncomeForDay(cars, d);
                     }
-
-                    HistogramDrawer.drawHistogram(
-                            canvas,
-                            income,
-                            "Ежедневный заработок парковки",
-                            "$"
-                    );
+                    HistogramDrawer.drawHistogram(canvas, income, "Ежедневный доход", "*");
                 }
 
-                case 5 -> {
+                case 12 -> {
                     double[] shortPark = new double[DAYS];
                     for (int d = 1; d <= DAYS; d++) {
                         shortPark[d - 1] = countCarsParkedLessThan30Min(cars, d);
                     }
-
-                    HistogramDrawer.drawHistogram(
-                            canvas,
-                            shortPark,
-                            "Машины, припаркованные < 30 минут",
-                            "*"
-                    );
+                    HistogramDrawer.drawHistogram(canvas, shortPark, "Машны < 30 минут", "*");
                 }
 
-                default -> System.out.println("Неверный пункт меню");
+                default -> System.out.println("Такого пункта меню нет.");
             }
         }
     }
