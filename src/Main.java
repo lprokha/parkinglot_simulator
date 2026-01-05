@@ -1,12 +1,4 @@
-import java.util.*;
-
 public class Main {
-    static final int TOTAL_CARS = 50;
-    static final int PARKING_SPOTS = 20;
-    static final int DAYS = 30;
-    static final int MINUTES_PER_STEP = 5;
-    static final int STEPS_IN_DAY = (24 * 60) / MINUTES_PER_STEP;
-
     public static void main(String[] args) {
         List<Car> cars = new ArrayList<>();
         for (int i = 1; i <= TOTAL_CARS; i++) {
@@ -492,13 +484,5 @@ public class Main {
                     }
                 }
 
-                if ((s.exitStep - s.entryStep) >= 2) {
-                    totalDebt += paidSteps * 0.10;
-                }
-            }
-            if (totalDebt > 0) {
-                System.out.printf("Машина %s: %.2f USD\n", car.getId(), totalDebt);
-            }
-        }
     }
 }
