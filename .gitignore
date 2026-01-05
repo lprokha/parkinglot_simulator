@@ -3,5 +3,6 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 /.idea/
+/parkinglot_simulator.iml
 /homeWork-29.iml
-parkinglot_simulator.iml
+/tasks.txt
