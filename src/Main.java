@@ -70,7 +70,7 @@ public class Main {
         boolean running = true;
 
         while (running) {
-            System.out.println("\n===== МЕНЮ =====");
+
             System.out.println("1. Показать счета за месяц");
             System.out.println("2. Список всех машин");
             System.out.println("3. 10 машин, стоявших дольше всего");
