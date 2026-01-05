@@ -1,4 +1,12 @@
+import java.util.*;
+
 public class Main {
+    static final int TOTAL_CARS = 50;
+    static final int PARKING_SPOTS = 20;
+    static final int DAYS = 30;
+    static final int MINUTES_PER_STEP = 5;
+    static final int STEPS_IN_DAY = (24 * 60) / MINUTES_PER_STEP;
+
     public static void main(String[] args) {
         List<Car> cars = new ArrayList<>();
         for (int i = 1; i <= TOTAL_CARS; i++) {
@@ -188,7 +196,7 @@ public class Main {
                     for (int d = 1; d <= DAYS; d++) {
                         shortPark[d - 1] = countCarsParkedLessThan30Min(cars, d);
                     }
-                    HistogramDrawer.drawHistogram(canvas, shortPark, "Машны < 30 минут", "*");
+                    HistogramDrawer.drawHistogram(canvas, shortPark, "Машины < 30 минут", "*");
                 }
 
                 default -> System.out.println("Такого пункта меню нет.");
@@ -483,6 +491,7 @@ public class Main {
                         paidSteps++;
                     }
                 }
-
+            }
+        }
     }
 }
