@@ -4,3 +4,4 @@ out/
 !**/src/test/**/out/
 /.idea/
 /homeWork-29.iml
+parkinglot_simulator.iml
