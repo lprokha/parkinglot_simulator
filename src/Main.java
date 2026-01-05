@@ -99,16 +99,74 @@ public class Main {
 
     public static void showMenu(List<Car> cars) {
         Scanner scanner = new Scanner(System.in);
+        Canvas canvas = new Canvas(80, 20);
+
         while (true) {
             System.out.println("1. Показать счета за месяц");
             System.out.println("2. Список всех машин");
+            System.out.println("3. Гистограмма средняя загруженность парковки");
+            System.out.println("4. Гистограмма ежедневный заработок");
+            System.out.println("5. Гистограмма машины < 30 минут");
             System.out.println("0. Выход");
 
             int choice = scanner.nextInt();
-            if (choice == 0) break;
+            switch (choice) {
+                case 0 -> {
+                    return;
+                }
 
-            if (choice == 1) {
-                calculateBills(cars);
+                case 1 -> calculateBills(cars);
+
+                case 2 -> {
+                    for (Car car : cars) {
+                        System.out.println(car.getId());
+                    }
+                }
+
+                case 3 -> {
+                    double[] occupancy = new double[DAYS];
+                    for (int d = 1; d <= DAYS; d++) {
+                        double percent = averageOccupancyPercent(cars, d);
+                        occupancy[d - 1] = percent * PARKING_SPOTS / 100.0;
+                    }
+
+                    HistogramDrawer.drawHistogram(
+                            canvas,
+                            occupancy,
+                            "Среднее количество занятых мест по дням",
+                            "*"
+                    );
+                }
+
+                case 4 -> {
+                    double[] income = new double[DAYS];
+                    for (int d = 1; d <= DAYS; d++) {
+                        income[d - 1] = totalIncomeForDay(cars, d);
+                    }
+
+                    HistogramDrawer.drawHistogram(
+                            canvas,
+                            income,
+                            "Ежедневный заработок парковки",
+                            "$"
+                    );
+                }
+
+                case 5 -> {
+                    double[] shortPark = new double[DAYS];
+                    for (int d = 1; d <= DAYS; d++) {
+                        shortPark[d - 1] = countCarsParkedLessThan30Min(cars, d);
+                    }
+
+                    HistogramDrawer.drawHistogram(
+                            canvas,
+                            shortPark,
+                            "Машины, припаркованные < 30 минут",
+                            "*"
+                    );
+                }
+
+                default -> System.out.println("Неверный пункт меню");
             }
         }
     }
