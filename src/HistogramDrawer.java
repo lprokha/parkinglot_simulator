@@ -28,7 +28,7 @@ public class HistogramDrawer {
             for (int h = 0; h < barHeight; h++) {
                 for (int w = 0; w < barWidth; w++) {
                     canvas.setPixel(
-                            2 + i * barWidth + w,
+                            2 + i,
                             baseY - h,
                             barSymbol
                     );
