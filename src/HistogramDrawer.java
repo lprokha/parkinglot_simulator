@@ -36,6 +36,16 @@ public class HistogramDrawer {
             }
         }
 
+        for (int i = 0; i < values.length; i++) {
+            int day = i + 1;
+            String label = String.valueOf(day % 10);
+            canvas.setPixel(
+                    2 + i,
+                    canvas.getHeight() - 2,
+                    label
+            );
+        }
+
         System.out.println(canvas);
     }
 }
